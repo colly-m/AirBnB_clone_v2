@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """This module defines a class to manage file storage for hbnb clone"""
 import json
+from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -8,8 +9,17 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    def all(self):
-        """Returns a dictionary of models currently in storage"""
+    def all(self, cls=None):
+        """Returns a dictionary of objects of one type of class"""
+        if cls is not None:
+            if isinstance(cls, str):
+                cls = globals().get(cls)
+
+            if cls and issubclass(cls, BaseModel):
+                filtered_objs = {k: o for k,
+                            o in self.__objects.items() if isinstance(o, cls)}
+                return filtered_objs
+
         return FileStorage.__objects
 
     def new(self, obj):
@@ -27,7 +37,6 @@ class FileStorage:
 
     def reload(self):
         """Loads storage dictionary from file"""
-        from models.base_model import BaseModel
         from models.user import User
         from models.place import Place
         from models.state import State
@@ -47,4 +56,15 @@ class FileStorage:
                 for key, val in temp.items():
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
+            pass
+
+    def delete(self, obj=None):
+        """Deletes obj from --objects if obj is equal to None"""
+        if obj is None:
+            return
+        del_obj = f"{obj.__class__.__name__}.{obj.id}"
+
+        try:
+            del self.__objects[del_obj]
+        except KeyError:
             pass
