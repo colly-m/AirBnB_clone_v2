@@ -35,7 +35,7 @@ class DBStorage:
     def all(self, cls=None):
         from models import base_model
         if cls is None:
-            objs = self.__session.query(State).all()
+            objs.extend(self.__session.query(State).all())
             objs.extend(self.__session.query(City).all())
             objs.extend(self.__session.query(User).all())
             objs.extend(self.__session.query(Place).all())
