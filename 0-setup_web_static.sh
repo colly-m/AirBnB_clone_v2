@@ -21,8 +21,7 @@ sudo chown -R ubuntu:ubuntu /data/
 sudo chgrp -R ubuntu:ubuntu /data/
 
 # Update Nginx configuration
-config_content=$(cat <<EOL
-server {
+printf %s 'server {
     listen 80 default_server;
     listen [::]:80 dfault_server;
     add_header X-Served-By $HOSTNAME;
@@ -46,11 +45,7 @@ server {
     location / {
         try_files \$uri \$uri/ =404;
     }
-}
-EOL
-)
-
-echo "$config_content" | sudo tee /etc/nginx/sites-available/default > /dev/null
+}' > sudo tee /etc/nginx/sites-available/default
 
 # Restart Nginx
 sudo service nginx restart
