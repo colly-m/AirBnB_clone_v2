@@ -24,33 +24,22 @@ def do_pack():
 def do_deploy(archive_path):
     """Deploys the archive to web servers"""
 
-    if not os.path.exists(archive_path):
-        return False
+    if os.path.exists(archive_path):
+        archived_file = archive_path[9:]
+        newer_version = "/data/web_static/releases/" + archived_file[:-4]
+        archived_file = "/tmp/" + archived_file
+        put(archive_path, "/tmp/")
+        run("sudo mkdir -p {}".format(newer_version))
+        run("sudo tar -xzf {} -C {}/".format(archived_file,
+                                             newer_version))
+        run("sudo rm {}".format(archived_file))
+        run("sudo mv {}/web_static/* {}".format(newer_version,
+                                                newer_version))
+        run("sudo rm -rf {}/web_static".format(newer_version))
+        run("sudo rm -rf /data/web_static/current")
+        run("sudo ln -s {} /data/web_static/current".format(newer_version))
 
-    try:
-        """Upload the archive to /tmp/ directory on the web server"""
-        put(archive_path, '/tmp/')
-
-        """Extract the archive to /data/web_static/releases/<archive filename without extension>"""
-        archive_filename = os.path.basename(archive_path)
-        release_folder = '/data/web_static/releases/{}'.format(
-            archive_filename[:-4] if archive_filename.endswith('.tgz') else archive_filename
-        )
-        run('mkdir -p {}'.format(release_folder))
-        run('tar -xzf /tmp/{} -C {}'.format(archive_filename, release_folder))
-
-        """Delete the archive from the web server"""
-        run('rm /tmp/{}'.format(archive_filename))
-
-        """Delete the symbolic link /data/web_static/current"""
-        current_link = '/data/web_static/current'
-        run('rm -rf {}'.format(current_link))
-
-        """Create a new symbolic link /data/web_static/current linked to the new version"""
-        run('ln -s {} {}'.format(release_folder, current_link))
-
+        print("New version deployed!")
         return True
 
-    except Exception as e:
-        print(f"Error: {e}")
-        return False
+    return False
