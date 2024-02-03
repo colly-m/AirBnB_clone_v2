@@ -6,7 +6,20 @@ from datetime import datetime
 
 
 env.user = 'ubuntu'
-env.hosts = ['<54.243.56.63>', '<54.209.3.212>']
+env.hosts = ['54.243.56.63', '54.209.3.212']
+
+def do_pack():
+    """Module to get the archive path if archive is generated correctly"""
+    local("mkdir -p versions")
+    date = datetime.now().strftime("%Y%m%d%H%M%S")
+    archive_field_path = "versions/web_static_{}.tgz".format(date)
+    t_gzip_archive = local("tar -cvzf {} web_static".format(archive_field_path))
+
+    if t_gzip_archive.succeeded:
+        return archive_field_path
+    else:
+        return None
+
 
 def do_deploy(archive_path):
     """Deploys the archive to web servers"""
