@@ -1,28 +1,31 @@
 #!/usr/bin/python3
-""" import flask """
-from flask import Flask
+"""Start web application with two routings
+"""
 
+from flask import Flask
 app = Flask(_name_)
 
 
-@app.route("/", strict_slashes=False)
+@app.route('/')
 def hello():
-    """ hello function content """
-    return "Hello HBNB!"
+    """Return string when route queried
+    """
+    return 'Hello HBNB!'
 
 
-@app.route("/hbnb", strict_slashes=False)
+@app.route('/hbnb')
 def hbnb():
-    """hbnb content return"""
-    return "HBNB"
+    """Return string when route queried
+    """
+    return 'HBNB'
 
 
-@app.route("/c/<text>", strict_slashes=False)
-def addText(text):
-    """add variable function starting with 'C' then text"""
-    text = text.replace("_", " ")
-    return 'C {}'.format(text)
+@app.route('/c/<text>')
+def c_is_fun(text):
+    """Return reformatted text
+    """
+    return 'C ' + text.replace('_', ' ')
 
-
-if _name_ == "_main_":
-    app.run(host="0.0.0.0", port=5000)
+if _name_ == '_main_':
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)
