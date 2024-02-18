@@ -1,25 +1,24 @@
 #!/usr/bin/python3
-"""Module to start a Flask web application
-That listens on 0.0.0.0, port 5000.
-Routes: Then Displays 'Hello HBNB!'
+"""Start web application with two routings
 """
+
 from flask import Flask
-
-app = Flask(__name__)
-
-
-# Define the route for the root
-@app.route("/", strict_slashes=False)
-def hello_hbnb():
-    """Displays 'Hello HBNB!'"""
-    return "Hello HBNB!"
+app = Flask(_name_)
 
 
-@app.route("/hbnb", strict_slashes=False)
+@app.route('/')
+def hello():
+    """Return string when route queried
+    """
+    return 'Hello HBNB!'
+
+
+@app.route('/hbnb')
 def hbnb():
-    """Display 'HBNB'"""
-    return "HBNB"
+    """Return string when route queried
+    """
+    return 'HBNB'
 
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+if _name_ == '_main_':
+    app.url_map.strict_slashes = False
+    app.run(host='0.0.0.0', port=5000)
