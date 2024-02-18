@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Module to start a Flask web application
 That listens on 0.0.0.0, port 5000.
-Routes: Then Displays 'Hello HBNB!'
+Routes: Then Displays 'Hello HBNB!', 'HBNB' and 'C'
 """
 from flask import Flask
 
@@ -19,6 +19,12 @@ def hello_hbnb():
 def hbnb():
     """Display 'HBNB'"""
     return "HBNB"
+
+
+@app.route("/c/<text>", strict_slashes=False)
+def cText(text):
+    """Displays C followed by the value of the text variable"""
+    return "C {}".format(text.replace("_", " "))
 
 
 if __name__ == "__main__":
