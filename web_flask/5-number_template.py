@@ -3,7 +3,7 @@
 That listens on 0.0.0.0, port 5000.
 Routes: Then Displays 'Hello HBNB!', 'HBNB', 'C', and 'Python'
 """
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
