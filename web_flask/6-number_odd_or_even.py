@@ -7,7 +7,7 @@ Routes: Then Displays 'Hello HBNB!', 'HBNB', 'C', and 'Python'
         'AN HTML page only if <n> is an int' also stating if
         <n> is even or odd'
 """
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
